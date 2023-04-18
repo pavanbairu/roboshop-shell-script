@@ -16,8 +16,8 @@ yum install rabbitmq-server -y
 
 # start the service
 echo -e "\e[36m start the service\e[0m"
-systemctl enable rabbitmq
-systemctl restart rabbitmq
+systemctl enable rabbitmq-server
+systemctl restart rabbitmq-server
 
 # rabbitmq comes with default username and password guest:guest. lets change it
 echo -e "\e[36m change default username and password\e[0m"
