@@ -50,5 +50,5 @@ yum install mongodb-org-shell -y
 # loading the schema
 echo -e "\e[36m loading the schema \e[0m"
 #mongo --host mongodb-dev.pavanbairu.tech </app/schema/catalogue.js
-mongo --host mongodb-dev.pavanbairu.tech </app/schema/catalogue.js
+mongo --host 172.31.17.92 </app/schema/catalogue.js
 
