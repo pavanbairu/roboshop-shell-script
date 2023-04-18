@@ -38,7 +38,7 @@ systemctl restart shipping
 # need to load the mqsql schema to function the db
 # setup mqsql repo file and copying it
 echo -e "\e[36m setup mqsql repo file and copying it \e[0m"
-cp /home/centos/roboshop-shell-script/mqsql.repo /etc/yum.repos.d/mqsql.repo
+cp /home/centos/roboshop-shell-script/mysql.repo /etc/yum.repos.d/mysql.repo
 
 # install the mysql client
 echo -e "\e[36m install the mysql client \e[0m"
