@@ -1,0 +1,14 @@
+[Unit]
+Description = User Service
+[Service]
+User=roboshop
+Environment=MONGO=true
+#Environment=REDIS_HOST=redis-dev.pavanbairu.tech
+#Environment=MONGO_URL="mongodb://mongodb-dev.pavanbairu.tech:27017/users"
+Environment=REDIS_HOST=172.31.19.109
+Environment=MONGO_URL="mongodb://172.31.17.92:27017/users"
+ExecStart=/bin/node /app/server.js
+SyslogIdentifier=user
+
+[Install]
+WantedBy=multi-user.target
