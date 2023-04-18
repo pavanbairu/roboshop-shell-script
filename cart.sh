@@ -4,7 +4,7 @@ curl -sL https://rpm.nodesource.com/setup_lts.x | bash
 
 # install nodejs
 echo -e "\e[36m install nodejs \e[0m"
-yum nodejs -y
+yum install nodejs -y
 
 # add application user
 echo -e "\e[36m add application user \e[0m"
