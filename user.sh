@@ -44,7 +44,7 @@ cp /home/centos/roboshop-shell-script/mongo.repo /etc/yum.repos.d/mongo.repo
 
 #need to install mongodb shell
 echo -e "\e[36m install mongodb shell \e[0m"
-yum install mongodb-org-shell
+yum install mongodb-org-shell -y
 
 # load schema
 echo -e "\e[36m load schema \e[0m"
