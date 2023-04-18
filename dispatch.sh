@@ -35,4 +35,4 @@ systemctl daemon-reload
 # start the service
 echo -e "\e[36m start the service \e[0m"
 systemctl enable dispatch
-systemctl restart dispatch
+systemctl start dispatch
