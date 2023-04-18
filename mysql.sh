@@ -12,8 +12,8 @@ yum install mysql-community-server -y
 
 #start the service
 echo -e "\e[36m start the service \e[0m"
-systemctl enable mysql
-systemctl restart mysql
+systemctl enable mysqld
+systemctl restart mysqld
 
 # need to change the default root password
 echo -e "\e[36m change the default root password \e[0m"
