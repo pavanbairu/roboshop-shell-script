@@ -32,4 +32,4 @@ systemctl daemon-reload
 # start the service
 echo -e "\e[36m start the service \e[0m"
 systemctl enable payment
-systemcl restart payment
+systemctl restart payment
