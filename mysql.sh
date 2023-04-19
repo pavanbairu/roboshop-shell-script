@@ -1,6 +1,9 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
 # created the mysql.repo
 echo -e "\e[36m setup the mysql repo \e[0m"
-cp /home/centos/roboshop-shell-script/mysql.repo /etc/yum.repos.d/mysql.repo
+cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo
 
 # mysql centos comes with default mysql 8 we need to disable it and use the 5.7 version
 echo -e "\e[36m disable mqsql 8 version \e[0m"

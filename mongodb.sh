@@ -1,6 +1,9 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
 # created the mongodb repo file
 echo -e "\e[36m setup the mongodb repo file\e[0m"
-cp /home/centos/roboshop-shell-script/mongo.repo /etc/yum.repos.d/mongo.repo
+cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
 
 echo -e "\e[36m install mongodb \e[0m"
 yum install mongodb-org -y

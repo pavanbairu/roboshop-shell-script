@@ -1,10 +1,15 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
+source ${script_path}/common.sh
+
 # need to install the java and it comes within maven package
 echo -e "\e[36m install maven \e[0m"
 yum install maven -y
 
 #add application user
 echo -e "\e[36m add application user \e[0m"
-useradd roboshop
+useradd ${app_user}
 
 # create the new directory
 echo -e "\e[36m create the new directory \e[0m"
@@ -24,7 +29,7 @@ mv target/shipping-1.0.jar shipping.jar
 
 # created the shipping service and copying it
 echo -e "\e[36m setup the shipping service and copying it \e[0m"
-cp /home/centos/roboshop-shell-script/shipping.service /etc/systemd/system/shipping.service
+cp ${script_path}/shipping.service /etc/systemd/system/shipping.service
 
 # Load the service.
 echo -e "\e[36m Load the service \e[0m"
@@ -38,7 +43,7 @@ systemctl restart shipping
 # need to load the mqsql schema to function the db
 # setup mqsql repo file and copying it
 echo -e "\e[36m setup mqsql repo file and copying it \e[0m"
-cp /home/centos/roboshop-shell-script/mysql.repo /etc/yum.repos.d/mysql.repo
+cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo
 
 # install the mysql client
 echo -e "\e[36m install the mysql client \e[0m"

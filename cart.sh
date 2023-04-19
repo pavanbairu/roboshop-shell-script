@@ -1,3 +1,8 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
+source ${script_path}/common.sh
+
 # setup node js repo
 echo -e "\e[36m setup nodejs\e[0m"
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
@@ -8,7 +13,7 @@ yum install nodejs -y
 
 # add application user
 echo -e "\e[36m add application user \e[0m"
-useradd roboshop
+useradd ${app_user}
 
 echo -e "\e[36m create directory \e[0m"
 rm -rf /app
@@ -26,7 +31,7 @@ npm install
 
 # created the cart service and copying it
 echo -e "\e[36m created the cart service and copying it \e[0m"
-cp /home/centos/roboshop-shell-script/cart.service /etc/systemd/system/cart.service
+cp ${script_path}/cart.service /etc/systemd/system/cart.service
 
 #Load the service.
 echo -e "\e[36m Load the service \e[0m"

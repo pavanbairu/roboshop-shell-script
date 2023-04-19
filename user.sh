@@ -1,3 +1,8 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
+source ${script_path}/common.sh
+
 #setup nodejs repo
 echo -e "\e[36m setup nodejs repo \e[0m"
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
@@ -8,7 +13,7 @@ yum install nodejs -y
 
 # Add application User
 echo -e "\e[36m add application user \e[0m"
-useradd roboshop
+useradd ${app_user}
 
 # create a new directory
 echo -e "\e[36m create a new directory \e[0m"
@@ -27,7 +32,7 @@ npm install
 
 # created the user.service file and copied it
 echo -e "\e[36m created the user.service file and copied it \e[0m"
-cp /home/centos/roboshop-shell-script/user.service /etc/systemd/system/user.service
+cp ${script_path}/user.service /etc/systemd/system/user.service
 
 # load the service
 echo -e "\e[36m load the service \e[0m"
@@ -40,7 +45,7 @@ systemctl restart user
 
 #we have setup the mongo repo and copying it
 echo -e "\e[36m setup the mongo repo and copying it \e[0m"
-cp /home/centos/roboshop-shell-script/mongo.repo /etc/yum.repos.d/mongo.repo
+cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
 
 #need to install mongodb shell
 echo -e "\e[36m install mongodb shell \e[0m"

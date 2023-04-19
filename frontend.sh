@@ -1,3 +1,6 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
 echo -e "\e[36m install nginx\e[0m"
 yum install nginx -y
 
@@ -7,7 +10,7 @@ systemctl start nginx
 
 # created the roboshop config file
 echo -e "\e[36m copying roboshop.conf file\e[0m"
-cp roboshop.conf /etc/nginx/default.d/roboshop.conf
+cp ${script_path}/roboshop.conf /etc/nginx/default.d/roboshop.conf
 
 #removing the existing content available in the below location
 echo -e "\e[36m removing the existing content available in the below location \e[0m"

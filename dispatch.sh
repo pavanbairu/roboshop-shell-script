@@ -1,10 +1,15 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
+source ${script_path}/common.sh
+
 # install golang
 echo -e "\e[36m install golang \e[0m"
 yum install golang -y
 
 # add application user
 echo -e "\e[36m add application user \e[0m"
-useradd roboshop
+useradd ${app_user}
 
 # create the directory
 echo -e "\e[36m create the directory \e[0m"
@@ -26,7 +31,7 @@ go build
 
 # setup dispatch service and copying it
 echo -e "\e[36m setup dispatch service and copying it \e[0m"
-cp /home/centos/roboshop-shell-script/dispatch.service /etc/yum.repos.d/dispatch.service
+cp ${script_path}/dispatch.service /etc/yum.repos.d/dispatch.service
 
 # load the service
 echo -e "\e[36m load the service \e[0m"
