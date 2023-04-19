@@ -3,45 +3,9 @@ script_path=$(dirname "$script") # gives the current file directory
 
 source ${script_path}/common.sh
 
-#setup nodejs repo
-echo -e "\e[36m setup nodejs repo \e[0m"
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash
-
-#Install NodeJS
-echo -e "\e[36m install nodejs \e[0m"
-yum install nodejs -y
-
-# Add application User
-echo -e "\e[36m add application user \e[0m"
-useradd ${app_user}
-
-# create a new directory
-echo -e "\e[36m create a new directory \e[0m"
-rm -rf /app
-mkdir /app
-
-# download the application content
-echo -e "\e[36m download the application content \e[0m"
-curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user.zip
-cd /app
-unzip /tmp/user.zip
-
-#download the dependencies
-echo -e "\e[36m download the dependencies \e[0m"
-npm install
-
-# created the user.service file and copied it
-echo -e "\e[36m created the user.service file and copied it \e[0m"
-cp ${script_path}/user.service /etc/systemd/system/user.service
-
-# load the service
-echo -e "\e[36m load the service \e[0m"
-systemctl daemon-reload
-
-# start the service
-echo -e "\e[36m start the service \e[0m"
-systemctl enable user
-systemctl restart user
+component=user
+echo calling function
+func_nodejs
 
 #we have setup the mongo repo and copying it
 echo -e "\e[36m setup the mongo repo and copying it \e[0m"
