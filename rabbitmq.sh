@@ -1,4 +1,10 @@
 rabbitmq_appuser_password=$1
+
+if [ -z "${rabbitmq_appuser_password}" ]; then
+  echo Input rabbitmq_appuser_password is missing
+  exit
+fi
+
 # set up repo
 echo -e "\e[36m setup erlang repo\e[0m"
 curl -sL https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash

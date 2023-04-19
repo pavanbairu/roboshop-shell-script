@@ -4,5 +4,5 @@ script_path=$(dirname "$script") # gives the current file directory
 source ${script_path}/common.sh
 
 component=cart
-echo calling function
+
 func_nodejs

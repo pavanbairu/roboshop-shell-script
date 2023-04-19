@@ -4,10 +4,28 @@ print(){
   echo -e "\e[36m $1 \e[0m"
 }
 
+
+
+schema_setup() {
+
+   if [ "$schema_setup" == "mongo" ]; then
+    # now we need to load schema to function the mongodb
+    # created the mongo repo file
+    print "setup mongo repo file and copying it"
+    cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
+
+    # install mongodb client
+    print "install mongodb client"
+    yum install mongodb-org-shell -y
+
+    # loading the schema
+    print "loading the schema"
+    mongo --host mongodb-dev.pavanbairu.tech </app/schema/catalogue.js
+  fi
+}
 func_nodejs(){
 
   # setup node js repo
-  echo calling print first time
   print "setup nodejs"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash
 
@@ -45,5 +63,7 @@ func_nodejs(){
   print "start the ${component} service"
   systemctl enable ${component}
   systemctl restart ${component}
+
+  schema_setup
 
 }

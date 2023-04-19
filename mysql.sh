@@ -1,6 +1,12 @@
 script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
 mysql_root_password=$1
+
+if [ -z "${mysql_root_password}" ]; then
+  echo Input mysql_root_password is missing
+  exit
+fi
+
 # created the mysql.repo
 echo -e "\e[36m setup the mysql repo \e[0m"
 cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo
