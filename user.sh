@@ -48,5 +48,4 @@ yum install mongodb-org-shell -y
 
 # load schema
 echo -e "\e[36m load schema \e[0m"
-#mongo --host mongodb-dev.pavanbairu.tech </app/schema/user.js
-mongo --host 172.31.17.92 </app/schema/user.js
+mongo --host mongodb-dev.pavanbairu.tech </app/schema/user.js

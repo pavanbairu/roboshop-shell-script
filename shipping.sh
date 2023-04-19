@@ -46,8 +46,7 @@ yum install mysql -y
 
 # load schema
 echo -e "\e[36m load schema \e[0m"
-#mysql -h mysql-dev.pavanbairu.tech -uroot -pRoboShop@1 < /app/schema/shipping.sql
-mysql -h 172.31.30.121 -uroot -pRoboShop@1 < /app/schema/shipping.sql
+mysql -h mysql-dev.pavanbairu.tech -uroot -pRoboShop@1 < /app/schema/shipping.sql
 
 # restart the service
 echo -e "\e[36m restart the service \e[0m"
