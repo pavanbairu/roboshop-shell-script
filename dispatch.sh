@@ -2,6 +2,7 @@ script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
 
 source ${script_path}/common.sh
+rabbitmq_appuser_password=$1
 
 # install golang
 echo -e "\e[36m install golang \e[0m"
@@ -31,6 +32,7 @@ go build
 
 # setup dispatch service and copying it
 echo -e "\e[36m setup dispatch service and copying it \e[0m"
+sed -i -e "s|rabbitmq_appuser_password|${rabbitmq_appuser_password}|" ${script_path}/dispatch.service
 cp ${script_path}/dispatch.service /etc/yum.repos.d/dispatch.service
 
 # load the service

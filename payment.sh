@@ -2,6 +2,7 @@ script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
 
 source ${script_path}/common.sh
+rabbitmq_appuser_password=$1
 
 # install the python
 echo -e "\e[36m install python \e[0m"
@@ -28,6 +29,7 @@ pip3.6 install -r requirements.txt
 
 # created the payment service and copying it
 echo -e "\e[36m setup the payment service and copying it \e[0m"
+sed -i -e "s|rabbitmq_appuser_password|${rabbitmq_appuser_password}|" ${script_path}/payment.service
 cp ${script_path}/payment.service /etc/systemd/system/payment.service
 
 # Load the service.

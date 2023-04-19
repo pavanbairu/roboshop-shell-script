@@ -2,6 +2,7 @@ script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
 
 source ${script_path}/common.sh
+mysql_root_password=$1
 
 # need to install the java and it comes within maven package
 echo -e "\e[36m install maven \e[0m"
@@ -51,7 +52,7 @@ yum install mysql -y
 
 # load schema
 echo -e "\e[36m load schema \e[0m"
-mysql -h mysql-dev.pavanbairu.tech -uroot -pRoboShop@1 < /app/schema/shipping.sql
+mysql -h mysql-dev.pavanbairu.tech -uroot -p${mysql_root_password} < /app/schema/shipping.sql
 
 # restart the service
 echo -e "\e[36m restart the service \e[0m"

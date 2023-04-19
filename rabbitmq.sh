@@ -1,3 +1,4 @@
+rabbitmq_appuser_password=$1
 # set up repo
 echo -e "\e[36m setup erlang repo\e[0m"
 curl -sL https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
@@ -21,5 +22,5 @@ systemctl restart rabbitmq-server
 
 # rabbitmq comes with default username and password guest:guest. lets change it
 echo -e "\e[36m change default username and password\e[0m"
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop ${rabbitmq_appuser_password}
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
