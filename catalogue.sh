@@ -1,3 +1,10 @@
+script=$(realpath "$0")
+script_path=$(dirname "$script")
+echo script_path is $script_path
+source ${script_path}/common.sh
+
+echo app user is $app_user
+exit
 # created the catalogue.service file
 echo -e "\e[36m setup the systemd service and copying it\e[0m"
 cp /home/centos/roboshop-shell-script/catalogue.service /etc/systemd/system/catalogue.service
@@ -12,7 +19,7 @@ yum install nodejs -y
 
 #Add application User
 echo -e "\e[36m Add application User \e[0m"
-useradd roboshop
+useradd ${app_user}
 
 #creating a directory
 echo -e "\e[36m creating a directory \e[0m"
