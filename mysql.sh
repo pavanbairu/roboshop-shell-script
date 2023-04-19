@@ -1,6 +1,6 @@
 script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
-
+mysql_root_password=$1
 # created the mysql.repo
 echo -e "\e[36m setup the mysql repo \e[0m"
 cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo
@@ -20,4 +20,4 @@ systemctl restart mysqld
 
 # need to change the default root password
 echo -e "\e[36m change the default root password \e[0m"
-mysql_secure_installation --set-root-pass RoboShop@1
+mysql_secure_installation --set-root-pass ${mysql_root_password}

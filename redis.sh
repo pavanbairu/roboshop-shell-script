@@ -14,6 +14,6 @@ yum install redis -y
 echo -e "\e[36m replace the redis Listen Address \e[0m"
 sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/redis/redis.conf /etc/redis.conf
 
-echo -e "\e[36m setup the redis rep \e[0m"
+echo -e "\e[36m restart the redis rep \e[0m"
 systemctl enable redis
 systemctl restart redis
