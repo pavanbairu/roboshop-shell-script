@@ -1,13 +1,11 @@
-script=$(realpath "$0")
-script_path=$(dirname "$script")
-echo script_path is $script_path
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
 source ${script_path}/common.sh
 
-echo app user is $app_user
-exit
 # created the catalogue.service file
 echo -e "\e[36m setup the systemd service and copying it\e[0m"
-cp /home/centos/roboshop-shell-script/catalogue.service /etc/systemd/system/catalogue.service
+cp ${script_path}/catalogue.service /etc/systemd/system/catalogue.service
 
 #Setup NodeJS repos. Vendor is providing a script to setup the repos.
 echo -e "\e[36m sSetup NodeJS repos\e[0m"
@@ -48,7 +46,7 @@ systemctl start catalogue
 # now we need to load schema to function the mongodb
 # created the mongo repo file
 echo -e "\e[36m setup mongo repo file and copying it\e[0m"
-cp /home/centos/roboshop-shell-script/mongo.repo /etc/yum.repos.d/mongo.repo
+cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
 
 # install mongodb client
 echo -e "\e[36m install mongodb client\e[0m"
