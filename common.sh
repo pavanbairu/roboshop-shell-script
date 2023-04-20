@@ -1,7 +1,10 @@
 app_user=roboshop
 
+logfile=/tmp/roboshop.log
+
 func_print(){
   echo -e "\e[36m $1 \e[0m"
+  echo -e "\e[36m $1 \e[0m" &>>$logfile
 }
 
 func_status_check()
@@ -10,9 +13,11 @@ func_status_check()
     echo "\e[32m SUCCESS \e[0m"
   else
     echo "\e[31m FAILURE \e[0m"
+    echo Refer the log file /tmp/roboshop.log for more information
     exit
   fi
 }
+
 func_schema_setup() {
 
    if [ "$schema_setup" == "mongo" ]; then
@@ -24,12 +29,12 @@ func_schema_setup() {
 
     # install mongodb client
     func_print "install mongodb client"
-    yum install mongodb-org-shell -y
+    yum install mongodb-org-shell -y &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
     # loading the schema
     func_print "loading the schema"
-    mongo --host mongodb-dev.pavanbairu.tech </app/schema/catalogue.js
+    mongo --host mongodb-dev.pavanbairu.tech </app/schema/catalogue.js &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
   fi
   if [ "$schema_setup" == "mysql" ]; then
@@ -39,11 +44,11 @@ func_schema_setup() {
       func_status_check $? #to checck the status of previous command or stage
 
       func_print "install the mysql client"
-      yum install mysql -y
+      yum install mysql -y &>>$logfile
       func_status_check $? #to checck the status of previous command or stage
 
       func_print "load schema"
-      mysql -h mysql-dev.pavanbairu.tech -uroot -p${mysql_root_password} < /app/schema/${component}.sql
+      mysql -h mysql-dev.pavanbairu.tech -uroot -p${mysql_root_password} < /app/schema/${component}.sql &>>$logfile
       func_status_check $? #to checck the status of previous command or stage
   fi
 }
@@ -52,7 +57,7 @@ func_app_prereq(){
 
   # add application user
     func_print "add application user"
-    useradd ${app_user}
+    useradd ${app_user} &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
     func_print "create directory"
@@ -62,9 +67,9 @@ func_app_prereq(){
 
     # download the application code
     func_print "download the application code"
-    curl -L -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip
+    curl -L -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>$logfile
     cd /app
-    unzip /tmp/${component}.zip
+    unzip /tmp/${component}.zip &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
 }
@@ -79,7 +84,7 @@ func_systemd_setup(){
     # start the service
     func_print "start the ${component} service"
     systemctl daemon-reload
-    systemctl enable ${component}
+    systemctl enable ${component} &>>$logfile
     systemctl restart ${component}
     func_status_check $? #to checck the status of previous command or stage
 
@@ -89,19 +94,19 @@ func_nodejs(){
 
   # setup node js repo
   func_print "setup nodejs"
-  curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+  curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
   # install nodejs
   func_print "install nodejs"
-  yum install nodejs -y
+  yum install nodejs -y &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
   func_app_prereq # calling app user
 
   # download the dependencies
   func_print "download the dependencies"
-  npm install
+  npm install &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
   func_schema_setup
@@ -113,14 +118,14 @@ func_java(){
   
   # need to install the java and it comes within maven package
   func_print "install maven"
-  yum install maven -y
+  yum install maven -y &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
   
   func_app_prereq # calling app user
   
   # download the dependencies and build application
   func_print "download the dependencies and build application"
-  mvn clean package
+  mvn clean package &>>$logfile
   mv target/${component}-1.0.jar ${component}.jar
   func_status_check $? #to checck the status of previous command or stage
 
