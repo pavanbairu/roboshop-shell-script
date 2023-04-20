@@ -37,7 +37,7 @@ func_schema_setup() {
 
     # loading the schema
     func_print "loading the schema"
-    mongo --host mongodb-dev.pavanbairu.tech </app/schema/catalogue.js &>>$logfile
+    mongo --host mongodb-dev.pavanbairu.tech </app/schema/${component}.js &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
   fi
   if [ "$schema_setup" == "mysql" ]; then
