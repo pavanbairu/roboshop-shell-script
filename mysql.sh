@@ -1,5 +1,8 @@
 script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
+
+source ${script_path}/common.sh
+
 mysql_root_password=$1
 
 if [ -z "${mysql_root_password}" ]; then
@@ -7,23 +10,23 @@ if [ -z "${mysql_root_password}" ]; then
   exit
 fi
 
-# created the mysql.repo
-echo -e "\e[36m setup the mysql repo \e[0m"
-cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo
+func_print "setup the mysql repo"
+cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# mysql centos comes with default mysql 8 we need to disable it and use the 5.7 version
-echo -e "\e[36m disable mqsql 8 version \e[0m"
-dnf module disable mysql -y
+func_print "disable mqsql 8 version"
+dnf module disable mysql -y &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# install mysql connector
-echo -e "\e[36m install mqsql connector \e[0m"
-yum install mysql-community-server -y
+func_print "install mqsql connector"
+yum install mysql-community-server -y &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-#start the service
-echo -e "\e[36m start the service \e[0m"
-systemctl enable mysqld
-systemctl restart mysqld
+func_print "start the service"
+systemctl enable mysqld &>>$logfile
+systemctl restart mysqld &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# need to change the default root password
-echo -e "\e[36m change the default root password \e[0m"
-mysql_secure_installation --set-root-pass ${mysql_root_password}
+func_print "change the default root password"
+mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$logfile
+func_status_check $? #to checck the status of previous command or stage

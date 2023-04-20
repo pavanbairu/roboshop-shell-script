@@ -1,17 +1,21 @@
 script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
 
-# created the mongodb repo file
-echo -e "\e[36m setup the mongodb repo file\e[0m"
-cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
+source ${script_path}/common.sh
 
-echo -e "\e[36m install mongodb \e[0m"
-yum install mongodb-org -y
+func_print "setup the mongodb repo file"
+cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# need to replace the ip address 127.0.0.1 with 0.0.0.0 in cd /etc/mongo.conf location
-echo -e "\e[36m need to change the mongodb listening address\e[0m"
-sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/mongod.conf
+func_print "install mongodb"
+yum install mongodb-org -y &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-echo -e "\e[36m start mongodb \e[0m"
-systemctl enable mongod
-systemctl restart mongod
+func_print "need to change the mongodb listening address"
+sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/mongod.conf &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
+
+func_print "start mongodb"
+systemctl enable mongod &>>$logfile
+systemctl restart mongod &>>$logfile
+func_status_check $? #to checck the status of previous command or stage

@@ -1,3 +1,4 @@
+source ${script_path}/common.sh
 rabbitmq_appuser_password=$1
 
 if [ -z "${rabbitmq_appuser_password}" ]; then
@@ -5,28 +6,29 @@ if [ -z "${rabbitmq_appuser_password}" ]; then
   exit
 fi
 
-# set up repo
-echo -e "\e[36m setup erlang repo\e[0m"
-curl -sL https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+func_print "setup erlang repo"
+curl -sL https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# Install ErLang
-echo -e "\e[36m Install ErLang\e[0m"
-yum install erlang -y
+func_print "Install ErLang"
+yum install erlang -y &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# setup the rabbitmq repo
-echo -e "\e[36m setup the rabbitmq repo \e[0m"
-curl -sL https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+func_print "setup the rabbitmq repo "
+curl -sL https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# install rabbitmq server
-echo -e "\e[36m install rabbitmq server \e[0m"
-yum install rabbitmq-server -y
+func_print "install rabbitmq server "
+yum install rabbitmq-server -y &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# start the service
-echo -e "\e[36m start the service\e[0m"
-systemctl enable rabbitmq-server
-systemctl restart rabbitmq-server
+func_print "start the service"
+systemctl enable rabbitmq-server &>>$logfile
+systemctl restart rabbitmq-server &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# rabbitmq comes with default username and password guest:guest. lets change it
-echo -e "\e[36m change default username and password\e[0m"
-rabbitmqctl add_user roboshop ${rabbitmq_appuser_password}
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+func_print "change default username and password"
+rabbitmqctl add_user roboshop ${rabbitmq_appuser_password} &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$logfile
+func_status_check $? #to checck the status of previous command or stage

@@ -1,28 +1,34 @@
 script=$(realpath "$0") # gives current file path including filename
 script_path=$(dirname "$script") # gives the current file directory
 
-echo -e "\e[36m install nginx\e[0m"
-yum install nginx -y
+source ${script_path}/common.sh
 
-echo -e "\e[36m start nginx \e[0m"
-systemctl enable nginx
-systemctl start nginx
+func_print "install nginx"
+yum install nginx -y &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-# created the roboshop config file
-echo -e "\e[36m copying roboshop.conf file\e[0m"
-cp ${script_path}/roboshop.conf /etc/nginx/default.d/roboshop.conf
+func_print "start nginx"
+systemctl enable nginx &>>$logfile
+systemctl start nginx &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-#removing the existing content available in the below location
-echo -e "\e[36m removing the existing content available in the below location \e[0m"
-rm -rf /usr/share/nginx/html/*
+func_print "copying roboshop.conf file"
+cp ${script_path}/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-echo -e "\e[36m download the application code \e[0m"
-curl -L -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend.zip
-cd /usr/share/nginx/html/
-unzip /tmp/frontend.zip
+func_print "removing the existing content available in the below location"
+rm -rf /usr/share/nginx/html/* &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
-echo -e "\e[36m restarting nginx \e[0m"
-systemctl restart nginx
+func_print "download the application code"
+curl -L -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend.zip &>>$logfile
+cd /usr/share/nginx/html/ &>>$logfile
+unzip /tmp/frontend.zip &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
+
+func_print "restarting nginx"
+systemctl restart nginx &>>$logfile
+func_status_check $? #to checck the status of previous command or stage
 
 
 

@@ -27,7 +27,7 @@ func_schema_setup() {
     # now we need to load schema to function the mongodb
     # created the mongo repo file
     func_print "setup mongo repo file and copying it"
-    cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
+    cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
     # install mongodb client
@@ -43,7 +43,7 @@ func_schema_setup() {
   if [ "$schema_setup" == "mysql" ]; then
 
       func_print "setup mqsql repo file and copying it"
-      cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo
+      cp ${script_path}/mysql.repo /etc/yum.repos.d/mysql.repo &>>$logfile
       func_status_check $? #to checck the status of previous command or stage
 
       func_print "install the mysql client"
@@ -67,14 +67,14 @@ func_app_prereq(){
     func_status_check $? #to checck the status of previous command or stage
 
     func_print "create directory"
-    rm -rf /app
-    mkdir /app
+    rm -rf /app &>>$logfile
+    mkdir /app &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
     # download the application code
     func_print "download the application code"
     curl -L -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>$logfile
-    cd /app
+    cd /app &>>$logfile
     unzip /tmp/${component}.zip &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
@@ -84,7 +84,7 @@ func_systemd_setup(){
 
   # created the service and copying it
     func_print "created the ${component} service and copying it"
-    cp ${script_path}/${component}.service /etc/systemd/system/${component}.service
+    cp ${script_path}/${component}.service /etc/systemd/system/${component}.service &>>$logfile
     func_status_check $? #to checck the status of previous command or stage
 
     # start the service
@@ -132,7 +132,7 @@ func_java(){
   # download the dependencies and build application
   func_print "download the dependencies and build application"
   mvn clean package &>>$logfile
-  mv target/${component}-1.0.jar ${component}.jar
+  mv target/${component}-1.0.jar ${component}.jar  &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
   func_schema_setup
