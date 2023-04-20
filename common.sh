@@ -1,3 +1,6 @@
+script=$(realpath "$0") # gives current file path including filename
+script_path=$(dirname "$script") # gives the current file directory
+
 app_user=roboshop
 
 logfile=/tmp/roboshop.log
@@ -10,9 +13,9 @@ func_print(){
 func_status_check()
 {
   if [ $1 -eq 0 ]; then
-    echo "\e[32m SUCCESS \e[0m"
+    echo -e "\e[32m SUCCESS\e[0m"
   else
-    echo "\e[31m FAILURE \e[0m"
+    echo -e "\e[31m FAILURE\e[0m"
     echo Refer the log file /tmp/roboshop.log for more information
     exit
   fi
@@ -139,20 +142,42 @@ func_java(){
 
 func_python(){
 
-  echo -e "\e[36m install python \e[0m"
+  func_print "install python"
   yum install python36 gcc python3-devel -y  &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
   func_app_prereq
 
-  echo -e "\e[36m download the python dependencies \e[0m"
+  func_print "download the python dependencies"
   pip3.6 install -r requirements.txt &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
-  echo -e "\e[36m password populating in payment.service \e[0m"
-  sed -i -e "s|rabbitmq_appuser_password|${rabbitmq_appuser_password}|" ${script_path}/payment.service &>>$logfile
+  func_print "password populating in payment.service"
+  sed -i -e "s|rabbitmq_appuser_password|${rabbitmq_appuser_password}|" ${script_path}/${component}.service &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
   func_systemd_setup
 
+}
+
+func_golang(){
+
+  func_print "install golang"
+  yum install golang -y &>>$logfile
+  func_status_check $? #to checck the status of previous command or stage
+
+  func_app_prereq
+
+  func_print "download the dependencies and build the software"
+  cd /app
+  go mod init dispatch
+  go get
+  go build  &>>$logfile
+  func_status_check $? #to checck the status of previous command or stage
+
+  func_print "setup ${component} service and copying it"
+  sed -i -e "s|rabbitmq_appuser_password|${rabbitmq_appuser_password}|" ${script_path}/${component}.service &>>$logfile
+  func_status_check $? #to checck the status of previous command or stage
+
+  func_systemd_setup
 }
