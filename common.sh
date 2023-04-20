@@ -57,7 +57,10 @@ func_app_prereq(){
 
   # add application user
     func_print "add application user"
-    useradd ${app_user} &>>$logfile
+    id ${app_user} &>>$logfile
+    if [ $? -ne 0 ]; then
+      useradd ${app_user} &>>$logfile
+    fi
     func_status_check $? #to checck the status of previous command or stage
 
     func_print "create directory"
@@ -132,4 +135,24 @@ func_java(){
   func_schema_setup
   func_systemd_setup
   
+}
+
+func_python(){
+
+  echo -e "\e[36m install python \e[0m"
+  yum install python36 gcc python3-devel -y  &>>$logfile
+  func_status_check $? #to checck the status of previous command or stage
+
+  func_app_prereq
+
+  echo -e "\e[36m download the python dependencies \e[0m"
+  pip3.6 install -r requirements.txt &>>$logfile
+  func_status_check $? #to checck the status of previous command or stage
+
+  echo -e "\e[36m password populating in payment.service \e[0m"
+  sed -i -e "s|rabbitmq_appuser_password|${rabbitmq_appuser_password}|" ${script_path}/payment.service &>>$logfile
+  func_status_check $? #to checck the status of previous command or stage
+
+  func_systemd_setup
+
 }
