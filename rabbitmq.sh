@@ -31,9 +31,9 @@ systemctl restart rabbitmq-server &>>$logfile
 func_status_check $? #to checck the status of previous command or stage
 
 func_print "add app user"
-rabbitmqctl list_users | grep {app_user} # to check the user exists or not
+rabbitmqctl list_users | grep ${app_user}  &>>$logfile # to check the user exists or not
 if [ $? -ne 0 ]; then
-  rabbitmqctl add_user {app_user} ${rabbitmq_appuser_password} &>>$logfile
+  rabbitmqctl add_user ${app_user} ${rabbitmq_appuser_password} &>>$logfile
 fi
 
 func_print "configuring password permissions for ${app_user}"
