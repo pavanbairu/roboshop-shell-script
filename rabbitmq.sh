@@ -30,8 +30,12 @@ systemctl enable rabbitmq-server &>>$logfile
 systemctl restart rabbitmq-server &>>$logfile
 func_status_check $? #to checck the status of previous command or stage
 
-func_print "change default username and password"
-rabbitmqctl add_user roboshop ${rabbitmq_appuser_password} &>>$logfile
-func_status_check $? #to checck the status of previous command or stage
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$logfile
+func_print "add app user"
+rabbitmqctl list_user | grep {app_user} # to check the user exists or not
+if [ $? -ne 0 ]; then
+  rabbitmqctl add_user {app_user} ${rabbitmq_appuser_password} &>>$logfile
+fi
+
+func_print "configuring password permissions for ${app_user}"
+rabbitmqctl set_permissions -p / ${app_user} ".*" ".*" ".*" &>>$logfile
 func_status_check $? #to checck the status of previous command or stage
