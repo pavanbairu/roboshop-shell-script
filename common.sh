@@ -170,8 +170,8 @@ func_golang(){
 
   func_print "download the dependencies and build the software"
   cd /app
-  go mod init dispatch
-  go get
+  go mod init dispatch &>>$logfile
+  go get &>>$logfile
   go build  &>>$logfile
   func_status_check $? #to checck the status of previous command or stage
 
