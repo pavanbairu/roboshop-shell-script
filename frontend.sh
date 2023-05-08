@@ -29,7 +29,3 @@ func_status_check $? #to checck the status of previous command or stage
 func_print "restarting nginx"
 systemctl restart nginx &>>$logfile
 func_status_check $? #to checck the status of previous command or stage
-
-
-
-
